@@ -9,17 +9,27 @@ const  HomeController = () => {
 
 
     useEffect(() => {
-        
+        console.log("Depois de alterar o status");
         manageInterval.current = setInterval(() => {
+            console.log("Info Running");
             if(status === "Rodando"){
                 setCount(count => count + 1)
             }            
         }, 1000);
 
         return () => {
+            console.log("Antes de renderizar ao mudar o status");
             clearInterval(manageInterval.current);
         }
-    })
+    },[status])
+
+    useEffect(() => {
+        console.log("Depois de montar o componente");
+        return () => {
+            console.log("Antes de desmontar o componente");
+            clearInterval(manageInterval.current);
+        };
+    }, [])
 
     const iniciar = () => {
         setStatus("Rodando")
