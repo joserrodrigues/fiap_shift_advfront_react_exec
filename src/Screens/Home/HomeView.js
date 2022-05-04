@@ -1,37 +1,63 @@
-import React from 'react';
-import './Home.css';
+import * as React from 'react';
+import './Home.css'
+import { Box, Container, CircularProgress, Grid, Typography, Button } from '@mui/material';
+import { Card, CardContent, CardMedia } from '@mui/material';
+import CardInfo from '../../Components/CardInfo/CardInfo'
 
-function HomeView({count, status, iniciar, pausar, parar}) {
+export default function HomeView({ loading, arrayToys, goToPage }) {
 
-    let buttons = null;
-    if(status === "Rodando"){
-        buttons = (
-            <>
-                <button onClick={pausar}>Pausar</button>
-                <button onClick={parar}>Parar</button>
-            </>            
+    let name = "";
+    let infoBox = [];
+
+    if (loading) {
+        infoBox.push(
+            <Grid key={1} item lg={12} xl={12} className="itemClass">
+                <CircularProgress />
+            </Grid>
+
         )
-    } else if(status === "Pausado"){
-        buttons = (
-            <>
-                <button onClick={iniciar}>Reiniciar</button>
-                <button onClick={parar}>Parar</button>
-            </>            
-        )        
-    } else { //status === "Parado"
-        buttons = (
-            <>
-                <button onClick={iniciar}>Iniciar</button>
-            </>            
-        )
+    } else if (arrayToys) {
+        arrayToys.toys.forEach(toy => {
+            infoBox.push(
+                <Grid key={toy._id} item sm={12} md={6} lg={2} xl={2} className="itemClass" onClick={() => goToPage(toy)}>
+                    <Card className='cardClass'>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            src={toy.mainImage}
+                            alt={toy.name}
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="body2" component="div" className='titleCard'>
+                                {toy.name}
+                            </Typography>
+                            <CardInfo />
+                        </CardContent>
+                    </Card>
+                </Grid>
+            )
+        });
     }
     return (
-        <div className="divInfo">
-            <div className="App">Contador - {count}  </div>
-            {buttons}
-        </div>
-        
+        <Container fixed className="container" maxWidth="lg">
+            <Box className="contentBox">
+                <Grid
+                    container
+                    spacing={3}
+                    alignItems="center"
+                >
+                    <Grid item lg={6} xl={6} className="titlePage">
+                        <Typography variant="h1" >
+                            Base de Brinquedos
+                        </Typography>
+                    </Grid>
+                    <Grid item lg={6} xl={6} className="titleButton">
+                        <Button variant='primary' className='buttonClass'>Cadastrar brinquedo</Button>
+                    </Grid>
+                    {infoBox}
 
+                </Grid>
+            </Box>
+        </Container>
     );
 }
-export default HomeView;

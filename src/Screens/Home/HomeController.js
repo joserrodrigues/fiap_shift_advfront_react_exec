@@ -1,58 +1,27 @@
-import React, {useState, useEffect, useRef} from 'react';
-import HomeView from './HomeView'
+import React, { useEffect, useState } from 'react';
+import useAPI from '../../Services/APIs/Common/useAPI';
+import toys from '../../Services/APIs/Toys/toys';
+import HomeView from './HomeView';
+import { useNavigate } from "react-router-dom";
 
-const  HomeController = () => {
 
-    const [count, setCount] = useState(0)
-    const [status, setStatus] = useState("Parado")
-    const manageInterval = useRef(null);
+export default function HomeController() {
 
+    const getToysGetAPI = useAPI(toys.getAllToys);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("Depois de alterar o status");
-        manageInterval.current = setInterval(() => {
-            console.log("Info Running");
-            if(status === "Rodando"){
-                setCount(count => count + 1)
+        getToysGetAPI.request(1);
+    }, []);
+
+    const goToPage = (toy) => {
+        navigate("/detail/"+toy._id,{
+            state:{
+                toy: JSON.stringify(toy)
             }            
-        }, 1000);
-
-        return () => {
-            console.log("Antes de renderizar ao mudar o status");
-            clearInterval(manageInterval.current);
-        }
-    },[status])
-
-    useEffect(() => {
-        console.log("Depois de montar o componente");
-        return () => {
-            console.log("Antes de desmontar o componente");
-            clearInterval(manageInterval.current);
-        };
-    }, [])
-
-    const iniciar = () => {
-        setStatus("Rodando")
-        
+        })
     }
 
-    const pausar = () => {
-        setStatus("Pausado")
-    }
-
-    const parar = () => {
-        setStatus("Parado")
-        setCount(0)
-    }
-    
-    return (
-        <HomeView 
-            count={count}
-            status={status}
-            iniciar={iniciar}
-            pausar={pausar}
-            parar={parar}
-            /> //Chamando o View
-    )
+    console.log(getToysGetAPI.data)
+    return <HomeView arrayToys={getToysGetAPI.data} loading={getToysGetAPI.loading} goToPage={goToPage} />
 }
-export default HomeController;
