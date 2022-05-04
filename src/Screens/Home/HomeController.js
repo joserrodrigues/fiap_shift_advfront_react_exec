@@ -12,13 +12,17 @@ class HomeController extends React.Component {
     }
 
     componentDidMount = () => {
-        setInterval(() => {
+        this.manageInterval = setInterval(() => {
             if(this.state.status === "Rodando"){
                 this.setState({
                     count: this.state.count + 1
                 })
             }
         }, 1000);
+    }
+
+    componentWillUnmount = () => {
+        clearInterval(this.manageInterval);
     }
 
     iniciar = () => {
