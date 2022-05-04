@@ -1,58 +1,48 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import HomeView from './HomeView'
 
-class HomeController extends React.Component {
+const  HomeController = () => {
 
-    constructor() {
-        super();        
-        this.state = {
-            count: 0,
-            status: "Parado"
-        };
-    }
+    const [count, setCount] = useState(0)
+    const [status, setStatus] = useState("Parado")
+    const manageInterval = useRef(null);
 
-    componentDidMount = () => {
-        this.manageInterval = setInterval(() => {
-            if(this.state.status === "Rodando"){
-                this.setState({
-                    count: this.state.count + 1
-                })
-            }
+
+    useEffect(() => {
+        
+        manageInterval.current = setInterval(() => {
+            if(status === "Rodando"){
+                setCount(count => count + 1)
+            }            
         }, 1000);
+
+        return () => {
+            clearInterval(manageInterval.current);
+        }
+    })
+
+    const iniciar = () => {
+        setStatus("Rodando")
+        
     }
 
-    componentWillUnmount = () => {
-        clearInterval(this.manageInterval);
+    const pausar = () => {
+        setStatus("Pausado")
     }
 
-    iniciar = () => {
-        this.setState({
-            status: "Rodando"
-        })
+    const parar = () => {
+        setStatus("Parado")
+        setCount(0)
     }
-
-    pausar = () => {
-        this.setState({
-            status: "Pausado"
-        })
-    }
-
-    parar = () => {
-        this.setState({
-            status: "Parado",
-            count: 0
-        })
-    }
-    render() {
-        return (
-            <HomeView 
-                count={this.state.count}
-                status={this.state.status}
-                iniciar={this.iniciar}
-                pausar={this.pausar}
-                parar={this.parar}
-                /> //Chamando o View
-        )
-    }
+    
+    return (
+        <HomeView 
+            count={count}
+            status={status}
+            iniciar={iniciar}
+            pausar={pausar}
+            parar={parar}
+            /> //Chamando o View
+    )
 }
 export default HomeController;
