@@ -6,21 +6,47 @@ class HomeController extends React.Component {
     constructor() {
         super();        
         this.state = {
-            count: 0
+            count: 0,
+            status: "Parado"
         };
     }
 
-    onClickButton = () => {
+    componentDidMount = () => {
+        setInterval(() => {
+            if(this.state.status === "Rodando"){
+                this.setState({
+                    count: this.state.count + 1
+                })
+            }
+        }, 1000);
+    }
+
+    iniciar = () => {
         this.setState({
-            count: this.state.count + 1
+            status: "Rodando"
         })
     }
 
+    pausar = () => {
+        this.setState({
+            status: "Pausado"
+        })
+    }
+
+    parar = () => {
+        this.setState({
+            status: "Parado",
+            count: 0
+        })
+    }
     render() {
         return (
             <HomeView 
                 count={this.state.count}
-                onClickButton={this.onClickButton}
+                status={this.state.status}
+                iniciar={this.iniciar}
+                pausar={this.pausar}
+                parar={this.parar}
                 /> //Chamando o View
         )
     }
