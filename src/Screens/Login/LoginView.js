@@ -4,25 +4,30 @@ import childrenImg from '../../Images/Children.png'
 import logoImg from '../../Images/Logo.png'
 import './Login.css'
 import CustomInput from '../../Components/CustomInput/CustomInput';
+import { Formik, Form } from "formik";
 
-const LoginView = ({ onClickLogin, isLoading, login, password, setLogin, setPassword, connectMessage}) => {
+const LoginView = ({ onClickLogin, isLoading, connectMessage, responseGoogle, signInSchema }) => {
 
     let infoMessage = null;
-    let info = (<Button variant='primary' onClick={onClickLogin}>Entrar</Button>);
-    if(isLoading){
+    let info = (
+        <div className='buttonGoogleDiv'>
+            <Button variant='primary' type="submit">Entrar</Button>
+        </div>
+    );    
+    if (isLoading) {
         info = (
             <div className='boxProgress'>
-                <CircularProgress color="primary" size={25}/>
+                <CircularProgress color="primary" size={25} />
             </div>
-        )
-    } 
-    
-    if (connectMessage !== "") {        
+        )      
+    }
+
+    if (connectMessage !== "") {
         infoMessage = (
             <div className='infoErrorMessage'>
-                <Typography variant="minSize" color="error">{connectMessage}</Typography>
+                <Typography variant="minSize" color="error" >{connectMessage}</Typography>
             </div>
-        )        
+        )
     }
     return (
         <Grid container
@@ -33,35 +38,52 @@ const LoginView = ({ onClickLogin, isLoading, login, password, setLogin, setPass
             className='gridClass'>
             <Grid item md={6} sm={6} >
                 <Box className='boxImg'>
-                    <img src={childrenImg} alt="children" width={'60%'} className="childrenImg"/>                    
+                    <img src={childrenImg} alt="children" width={'60%'} className="childrenImg" />
                 </Box>
             </Grid>
             <Grid item md={6} sm={6}>
                 <Box className='boxLogin'>
-                    <img src={logoImg} alt="Logo" width={'40px'} className="logo"/>
+                    <img src={logoImg} alt="Logo" width={'40px'} className="logo" />
                     <Typography variant="h1">Bem-vindo!</Typography>
-                    <CustomInput
-                        label="Digite seu e-mail"
-                        defaultValue={login}
-                        errorMessage=""
-                        placeholder="mario@cqb.com.br"
-                        hasError={false} 
-                        value={login}
-                        onChange={(event) => setLogin(event.target.value)}
-                        />
-                    <CustomInput
-                        label="Digite sua senha"
-                        defaultValue={password}
-                        errorMessage=""
-                        placeholder="**************"
-                        hasError={false}
-                        type="password" 
-                        onChange={(event) => setPassword(event.target.value)}
-                        />
-                    {info}
-                    {infoMessage}
-                </Box>                
-            </Grid>            
+                    <p></p>
+                    <Formik
+                        initialValues={{
+                            email: "",
+                            password: "",
+                        }}
+                        validationSchema={signInSchema}
+                        onSubmit={onClickLogin}>
+                        {(formik) => {
+                            const { errors, setFieldValue } = formik;
+                            return (
+                                <Form>
+                                    <CustomInput
+                                        label="Digite seu e-mail"
+                                        placeholder="mario@cqb.com.br"
+                                        errorMessage={errors.email}
+                                        hasError={errors.hasOwnProperty('email')}
+                                        onChange={e => setFieldValue('email', e.target.value)}
+                                    />
+                                    <p></p>
+                                    <CustomInput
+                                        label="Digite sua senha"
+                                        placeholder="**************"
+                                        type="password"
+                                        errorMessage={errors.password}
+                                        hasError={errors.hasOwnProperty('password')}
+                                        onChange={e => setFieldValue('password', e.target.value)}
+                                    />
+                                    {infoMessage}
+                                    {info}
+                                </Form>
+                            );
+
+                        }}
+                    </Formik >
+
+
+                </Box>
+            </Grid>
         </Grid>
     );
 };
