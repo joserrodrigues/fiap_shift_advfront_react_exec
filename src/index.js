@@ -6,8 +6,11 @@ import MuiThemes from './Utils/Common/MuiThemes';
 import { BrowserRouter } from "react-router-dom";
 import Routes from './Routes/RouteController';
 import { InfoContextProvider } from './store/InfoContext';
+import serviceWorker from './serviceworker';
 
-ReactDOM.render(
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
     <MuiThemes>
       <BrowserRouter>
@@ -15,7 +18,7 @@ ReactDOM.render(
           <Routes />
         </InfoContextProvider>
       </BrowserRouter>
-    </MuiThemes>
+    </MuiThemes>    
   </React.StrictMode>,
   document.getElementById('root')
 );
@@ -24,3 +27,4 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+serviceWorker.registerServiceWorker();
