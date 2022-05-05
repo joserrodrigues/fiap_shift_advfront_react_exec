@@ -10,6 +10,9 @@
     text-align: center;
 }
 
+.MuiFormControl-root{
+    width: 100%;
+}
 @media screen and (min-width: 100px) {
     .boxLogin{
         width: 200px;
@@ -18,14 +21,14 @@
 
 @media screen and (min-width: 768px) {
     .boxLogin{
-        width: 300px;
-    }
+        width: 350px;
+    }    
 }
 
 @media screen and (min-width: 900px) {
     .boxLogin{
         width: 400px;
-    }
+    }    
 }
 
 
@@ -47,20 +50,4 @@
 
 .infoErrorMessage{
     text-align: center;
-}
-
-.buttonGoogleDiv{
-    text-align: center;
-}
-
-.boxButton{
-    text-align: center;
-}
-
-.MuiFormControl-root{
-    width: 100%;
-}
-
-.circularProgress{
-    margin-top: 15px;
 }
